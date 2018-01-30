@@ -59,6 +59,9 @@ Even though the description of the property `name` specifies that the value must
 }
 ```
 
+> ### `pattern` and `format`
+> Since the `format` is an open value and serves as a hint a case could be made that the existence of both `pattern` and `format` can further enhance the user experience by providing necessary means for refinement types. For example by adding `"format": "DNS_LABEL"` it's possible to communicate with the target programming language that it's a string with `DNS_LABEL` refinement that constrains the set of values. The interpretation is, of course, language dependent.
+
 Enums can also be used to greatly reduce the number of possible values. For example, here's a simplified definition of `v1.PodSpec`:
 
 ```json
@@ -156,7 +159,7 @@ type OpenAPIFormat interface {
 }
 
 func (v VolumeName) OpenAPIFormat() string {
-  return const
+  return dns1123LabelFmt
 }
 ```
 
