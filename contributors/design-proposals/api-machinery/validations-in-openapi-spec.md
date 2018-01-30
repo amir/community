@@ -145,6 +145,21 @@ type Volume struct {
 
 Is a copy of what's already present in `k8s.io/apimachinery/pkg/util/validation` Go package.
 
+One approach to prevent literal duplication of these definitions is to introduce an interface that stringifies them and generator would use this representation if a type has implemented the interface:
+
+```Go
+const dns1123LabelFmt string = "[a-z0-9]([-a-z0-9]*[a-z0-9])?"
+var dns1123LabelRegexp = regexp.MustCompile("^" + dns1123LabelFmt + "$")
+
+type OpenAPIFormat interface {
+  OpenAPIFormat string
+}
+
+func (v VolumeName) OpenAPIFormat() string {
+  return const
+}
+```
+
 ## Implementation
 
 After agreeing upon a way to specify these requirements with the least amount of duplication, the implementation is twofold: extending [kubernetes/kube-openapi](https://github.com/kubernetes/kube-openapi) to support these constructs and annotating Kubernetes source code with them.
